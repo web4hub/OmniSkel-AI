@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniSkel-AI — Multimodal Musculoskeletal Intelligence Platform</title>
+  <meta
+    name="description"
+    content="Technical blueprint for OmniSkel-AI, a multimodal musculoskeletal intelligence platform beginning with a knee-focused prototype and designed for full-body expansion."
+  >
+  <meta
+    name="keywords"
+    content="OmniSkel-AI, musculoskeletal AI, knee AI, medical imaging, MRI, X-ray, CT, ultrasound, osteoarthritis, multimodal AI, healthcare AI"
+  >
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0d1a2b;
+      --panel: #102238;
+      --panel-2: #142b45;
+      --text: #eaf2fb;
+      --muted: #9fb3c8;
+      --primary: #55d6be;
+      --secondary: #68a8ff;
+      --accent: #c084fc;
+      --warning: #f6c85f;
+      --danger: #ff7b7b;
+      --border: rgba(255, 255, 255, 0.1);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      --radius: 18px;
+      --max-width: 1200px;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(104, 168, 255, 0.12),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 20%,
+          rgba(192, 132, 252, 0.10),
+          transparent 30%
+        ),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    a {
+      color: var(--secondary);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    img {
+      max-width: 100%;
+      display: block;
+    }
+    code,
+    pre {
+      font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        Menlo,
+        monospace;
+    }
+    .container {
+      width: min(100% - 40px, var(--max-width));
+      margin: 0 auto;
+    }
+    /* =========================
+       HEADER
+    ========================== */
+    header {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero {
+      padding: 100px 0;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 13px;
+      border: 1px solid rgba(85, 214, 190, 0.3);
+      border-radius: 999px;
+      color: var(--primary);
+      background: rgba(85, 214, 190, 0.07);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      max-width: 1000px;
+      margin-bottom: 28px;
+    }
+    .hero h1 span {
+      color: var(--primary);
+    }
+    .hero-subtitle {
+      max-width: 850px;
+      color: var(--muted);
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      margin-bottom: 36px;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .badge {
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    /* =========================
+       NAVIGATION
+    ========================== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(7, 17, 31, 0.82);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      width: min(100% - 40px, var(--max-width));
+      margin: auto;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      overflow-x: auto;
+    }
+    .nav-brand {
+      color: var(--primary);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    nav a {
+      color: var(--muted);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    nav a:hover {
+      color: var(--text);
+      text-decoration: none;
+    }
+    /* =========================
+       MAIN
+    ========================== */
+    main {
+      padding: 80px 0;
+    }
+    section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-child {
+      border-bottom: 0;
+    }
+    .section-number {
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 20px;
+    }
+    h3 {
+      font-size: 1.35rem;
+      margin: 28px 0 12px;
+    }
+    h4 {
+      margin: 20px 0 8px;
+      color: var(--primary);
+    }
+    p {
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    ul,
+    ol {
+      margin: 16px 0 20px 22px;
+      color: var(--muted);
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    strong {
+      color: var(--text);
+    }
+    /* =========================
+       CARDS
+    ========================== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+    .card {
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.055),
+          rgba(255, 255, 255, 0.02)
+        );
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+    .card h3 {
+      margin-top: 0;
+      color: var(--text);
+    }
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+    .metric {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    /* =========================
+       ARCHITECTURE
+    ========================== */
+    .architecture {
+      margin: 36px auto;
+      max-width: 850px;
+    }
+    .arch-layer {
+      padding: 20px 24px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+      position: relative;
+    }
+    .arch-layer strong {
+      display: block;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    .arch-layer span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .arch-arrow {
+      text-align: center;
+      color: var(--secondary);
+      font-size: 1.5rem;
+      line-height: 1;
+      margin: -3px 0;
+    }
+    /* =========================
+       PIPELINE
+    ========================== */
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 30px;
+    }
+    .pipeline-step {
+      position: relative;
+      padding: 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    .pipeline-step .number {
+      display: inline-flex;
+      width: 30px;
+      height: 30px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(85, 214, 190, 0.12);
+      color: var(--primary);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    /* =========================
+       CODE
+    ========================== */
+    pre {
+      background: #040b14;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      overflow-x: auto;
+      color: #cce6ff;
+      line-height: 1.55;
+      margin: 24px 0;
+    }
+    .code-label {
+      display: inline-block;
+      margin-bottom: -1px;
+      padding: 6px 10px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-bottom: 0;
+      border-radius: 9px 9px 0 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    /* =========================
+       TABLE
+    ========================== */
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 28px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+    th,
+    td {
+      padding: 15px 18px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--panel-2);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    td {
+      color: var(--muted);
+    }
+    tr:last-child td {
+      border-bottom: 0;
+    }
+    /* =========================
+       CALLOUTS
+    ========================== */
+    .callout {
+      margin: 28px 0;
+      padding: 22px 24px;
+      border-left: 4px solid var(--primary);
+      background: rgba(85, 214, 190, 0.06);
+      border-radius: 0 12px 12px 0;
+    }
+    .callout.warning {
+      border-left-color: var(--warning);
+      background: rgba(246, 200, 95, 0.06);
+    }
+    .callout.danger {
+      border-left-color: var(--danger);
+      background: rgba(255, 123, 123, 0.06);
+    }
+    .callout p:last-child {
+      margin-bottom: 0;
+    }
+    /* =========================
+       ROADMAP
+    ========================== */
+    .timeline {
+      margin-top: 35px;
+      border-left: 2px solid rgba(85, 214, 190, 0.3);
+      padding-left: 28px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 34px;
+    }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--primary);
+      left: -36px;
+      top: 6px;
+      box-shadow: 0 0 0 5px rgba(85, 214, 190, 0.08);
+    }
+    .timeline-item h3 {
+      margin-top: 0;
+    }
+    /* =========================
+       FOOTER
+    ========================== */
+    footer {
+      padding: 60px 0;
+      background: #040b14;
+      border-top: 1px solid var(--border);
+    }
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      align-items: flex-start;
+    }
+    .footer-brand {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .footer-note {
+      max-width: 600px;
+    }
+    .copyright {
+      color: #71869b;
+      font-size: 0.85rem;
+      margin-top: 25px;
+    }
+    /* =========================
+       RESPONSIVE
+    ========================== */
+    @media (max-width: 900px) {
+      .grid,
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .pipeline {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 650px) {
+      .container,
+      .nav-inner {
+        width: min(100% - 28px, var(--max-width));
+      }
+      .hero {
+        padding: 70px 0;
+      }
+      section {
+        padding: 60px 0;
+      }
+      .grid,
+      .grid-2,
+      .pipeline {
+        grid-template-columns: 1fr;
+      }
+      .footer-content {
+        flex-direction: column;
+      }
+      h1 {
+        font-size: 3.2rem;
+      }
+    }
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      nav {
+        display: none;
+      }
+      header {
+        min-height: auto;
+      }
+      section {
+        break-inside: avoid;
+      }
+      .card,
+      .arch-layer,
+      .pipeline-step {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ============================================================
+       HERO
+  ============================================================= -->
+  <header id="top">
+    <div class="container hero">
+      <div class="eyebrow">
+        Multimodal Musculoskeletal Intelligence
+      </div>
+      <h1>
+        OmniSkel<span>-AI</span>
+      </h1>
+      <p class="hero-subtitle">
+        A multimodal musculoskeletal intelligence platform designed to
+        combine medical imaging, artificial intelligence, longitudinal
+        analysis, explainability, and clinical workflow integration.
+      </p>
+      <div class="hero-meta">
+        <span class="badge">Phase 1 — Knee</span>
+        <span class="badge">X-ray + MRI</span>
+        <span class="badge">PyTorch / MONAI</span>
+        <span class="badge">Explainable AI</span>
+        <span class="badge">Longitudinal Analysis</span>
+        <span class="badge">Full-body Expansion</span>
+      </div>
+    </div>
+  </header>
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================= -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-brand" href="#top">OmniSkel-AI</a>
+      <a href="#problem">Problem</a>
+      <a href="#phase1">Phase 1</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#data">Data</a>
+      <a href="#models">AI Models</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#longitudinal">Longitudinal</a>
+      <a href="#security">Security</a>
+      <a href="#validation">Validation</a>
+      <a href="#phase2">Phase 2</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+  </nav>
+  <main>
+    <!-- ============================================================
+         WHY THIS MATTERS
+    ============================================================= -->
+    <section id="problem">
+      <div class="container">
+        <div class="section-number">01 — Clinical Context</div>
+        <h2>Why This Matters</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Clinical Problem</h3>
+            <p>
+              Knee osteoarthritis is a major musculoskeletal disease burden,
+              particularly among older adults. Early structural changes can
+              be difficult to identify consistently across routine clinical
+              workflows.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Current Gaps</h3>
+            <p>
+              Imaging data are frequently siloed across X-ray, MRI,
+              ultrasound, and CT systems. Longitudinal comparison and
+              multimodal interpretation can therefore remain fragmented.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Proposed Solution</h3>
+            <p>
+              OmniSkel-AI is designed as a unified platform that can fuse
+              multiple imaging modalities to detect abnormalities, quantify
+              structural changes, track progression, and present
+              interpretable findings.
+            </p>
+          </article>
+        </div>
+        <div class="callout">
+          <p>
+            <strong>Core principle:</strong>
+            OmniSkel-AI should function as clinical decision support,
+            keeping the clinician in the loop while making multimodal
+            imaging analysis more structured, measurable, and explainable.
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         PHASE 1
+    ============================================================= -->
+    <section id="phase1">
+      <div class="container">
+        <div class="section-number">02 — Phase 1</div>
+        <h2>Knee-Focused Prototype</h2>
+        <p>
+          Phase 1 is a six-month prototype focused on knee osteoarthritis,
+          meniscal pathology, and ligament injuries.
+        </p>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Core Modalities</h3>
+            <ul>
+              <li>X-ray</li>
+              <li>MRI</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Future Modalities</h3>
+            <ul>
+              <li>Ultrasound</li>
+              <li>CT</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Initial Pathologies</h3>
+            <ul>
+              <li>Knee osteoarthritis</li>
+              <li>Meniscal tears</li>
+              <li>Ligament injuries</li>
+              <li>Cartilage degeneration</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Primary Outputs</h3>
+            <ul>
+              <li>Detection</li>
+              <li>Segmentation</li>
+              <li>Quantitative measurements</li>
+              <li>Longitudinal change</li>
+              <li>Explainable findings</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         SYSTEM ARCHITECTURE
+    ============================================================= -->
+    <section id="architecture">
+      <div class="container">
+        <div class="section-number">03 — System Architecture</div>
+        <h2>Platform Architecture</h2>
+        <p>
+          OmniSkel-AI is organized as a layered architecture so that
+          individual models, anatomical modules, data sources, and clinical
+          integrations can evolve independently.
+        </p>
+        <div class="architecture">
+          <div class="arch-layer">
+            <strong>Clinical Interface Layer</strong>
+            <span>
+              Radiologist dashboard · EHR integration · Patient portal
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>Explainable AI &amp; Reporting</strong>
+            <span>
+              Natural-language summaries · Visual saliency maps · Structured
+              findings · Risk/context indicators
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>Multimodal Fusion &amp; Analytics</strong>
+            <span>
+              Joint-space measurements · Pathology quantification ·
+              Longitudinal tracking
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>AI Model Layer</strong>
+            <span>
+              Multimodal transformer · Segmentation · Detection · Regression
+              · Temporal models
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>Data Ingestion &amp; Preprocessing</strong>
+            <span>
+              DICOM ingestion · Harmonization · Quality control · Artifact
+              handling · Augmentation
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>Secure Data Repository</strong>
+            <span>
+              De-identified datasets · Consent management · Encryption ·
+              Auditability
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         DATA
+    ============================================================= -->
+    <section id="data">
+      <div class="container">
+        <div class="section-number">04 — Data Layer</div>
+        <h2>Medical Imaging Data Pipeline</h2>
+        <p>
+          The data layer is responsible for ingestion, de-identification,
+          normalization, quality control, preprocessing, annotation
+          management, and dataset provenance.
+        </p>
+        <h3>Potential Data Sources</h3>
+        <div class="grid">
+          <article class="card">
+            <h3>X-ray</h3>
+            <p>
+              AP and lateral knee radiographs from appropriately licensed
+              research datasets and participating clinical institutions.
+            </p>
+          </article>
+          <article class="card">
+            <h3>MRI</h3>
+            <p>
+              Knee MRI sequences such as proton-density fat-saturated,
+              T1-weighted, and T2-weighted acquisitions.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Ground Truth</h3>
+            <p>
+              Radiologist annotations, structural measurements,
+              osteoarthritis grades, cartilage annotations, and meniscal
+              pathology labels where available.
+            </p>
+          </article>
+        </div>
+        <h3>Preprocessing Pipeline</h3>
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="number">1</div>
+            <h3>DICOM</h3>
+            <p>
+              Validate and standardize imaging metadata and pixel data.
+            </p>
+          </div>
+          <div class="pipeline-step">
+            <div class="number">2</div>
+            <h3>De-identify</h3>
+            <p>
+              Remove or transform protected health information before
+              research processing.
+            </p>
+          </div>
+          <div class="pipeline-step">
+            <div class="number">3</div>
+            <h3>Normalize</h3>
+            <p>
+              Harmonize spatial resolution, orientation, intensity, and
+              scanner-related variation.
+            </p>
+          </div>
+          <div class="pipeline-step">
+            <div class="number">4</div>
+            <h3>Quality Control</h3>
+            <p>
+              Detect incomplete, corrupted, misaligned, or unsuitable
+              studies.
+            </p>
+          </div>
+        </div>
+        <h3>Processing Techniques</h3>
+        <ul>
+          <li>
+            DICOM standardization and conversion to research-friendly
+            volumetric representations such as NIfTI.
+          </li>
+          <li>
+            Anatomical landmark alignment and spatial normalization.
+          </li>
+          <li>
+            MRI bias-field correction using methods such as N4.
+          </li>
+          <li>
+            Histogram and scanner harmonization where scientifically
+            justified.
+          </li>
+          <li>
+            Data augmentation for class imbalance and robustness.
+          </li>
+          <li>
+            Synthetic-data generation using diffusion or other generative
+            methods only after rigorous validation.
+          </li>
+        </ul>
+        <div class="callout warning">
+          <p>
+            <strong>Data integrity rule:</strong>
+            Synthetic images should never silently enter the validation or
+            test set. Real-world held-out data must remain isolated for
+            meaningful performance evaluation.
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         AI MODEL
+    ============================================================= -->
+    <section id="models">
+      <div class="container">
+        <div class="section-number">05 — AI Model Layer</div>
+        <h2>MultiSkelFormer</h2>
+        <p>
+          The proposed Phase 1 core architecture is
+          <strong>MultiSkelFormer</strong>, a modular multimodal transformer
+          designed to align information from 2D X-ray imagery and 3D MRI
+          volumes.
+        </p>
+        <h3>Input</h3>
+        <div class="grid-2">
+          <article class="card">
+            <h3>X-ray Pathway</h3>
+            <p>
+              Two-dimensional radiographs processed through a dedicated
+              visual encoder with spatial normalization.
+            </p>
+          </article>
+          <article class="card">
+            <h3>MRI Pathway</h3>
+            <p>
+              Three-dimensional MRI volumes processed through a volumetric
+              encoder capable of learning spatial and anatomical features.
+            </p>
+          </article>
+        </div>
+        <h3>Encoder Architecture</h3>
+        <pre><code>                    MultiSkelFormer
+                          │
+              ┌───────────┴───────────┐
+              │                       │
+              ▼                       ▼
+        X-ray Encoder            MRI Encoder
+              │                       │
+       EfficientNet-V2          3D ResNet / ViT
+              │                       │
+       Spatial Alignment        Volume Features
+              │                       │
+              └───────────┬───────────┘
+                          ▼
+                Cross-Modal Attention
+                          │
+                          ▼
+                 Unified Representation
+                          │
+             ┌────────────┼────────────┐
+             ▼            ▼            ▼
+        Detection    Segmentation   Measurement
+             │            │            │
+             └────────────┼────────────┘
+                          ▼
+                  Clinical Findings</code></pre>
+        <h3>Fusion</h3>
+        <p>
+          Cross-modal attention allows information from one modality to
+          condition interpretation of the other. For example, X-ray
+          structural information can provide contextual information for
+          MRI-derived soft-tissue features.
+        </p>
+        <h3>Model Heads</h3>
+        <div class="grid">
+          <article class="card">
+            <h3>Detection Head</h3>
+            <p>
+              Detect abnormal regions such as osteophytes and other
+              predefined pathology targets.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Segmentation Head</h3>
+            <p>
+              Segment cartilage, menisci, bone, and other anatomical
+              structures using architectures such as nnU-Net.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Measurement Head</h3>
+            <p>
+              Estimate quantitative measurements such as joint-space width,
+              femoral alignment, and tibial slope.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Longitudinal Head</h3>
+            <p>
+              Model change across repeated examinations using temporal
+              architectures and attention.
+            </p>
+          </article>
+        </div>
+        <h3>Candidate Technologies</h3>
+        <ul>
+          <li>PyTorch</li>
+          <li>MONAI</li>
+          <li>nnU-Net</li>
+          <li>3D ResNet / 3D Vision Transformer</li>
+          <li>EfficientNet-V2</li>
+          <li>Attention mechanisms</li>
+          <li>Temporal CNN / LSTM</li>
+        </ul>
+      </div>
+    </section>
+    <!-- ============================================================
+         EXPLAINABILITY
+    ============================================================= -->
+    <section id="explainability">
+      <div class="container">
+        <div class="section-number">06 — Explainability</div>
+        <h2>Explainable AI</h2>
+        <p>
+          Explainability is treated as a first-class component of the
+          platform rather than a post-processing feature.
+        </p>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Grad-CAM / Grad-CAM++</h3>
+            <p>
+              Generate visual attribution maps showing image regions that
+              contributed to a model prediction.
+            </p>
+          </article>
+          <article class="card">
+            <h3>SHAP</h3>
+            <p>
+              Analyze feature contributions for appropriate structured
+              measurements and prediction models.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Structured Findings</h3>
+            <p>
+              Convert model outputs into machine-readable findings before
+              any natural-language generation occurs.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Human Review</h3>
+            <p>
+              Allow radiologists to inspect, accept, reject, or correct
+              individual AI findings.
+            </p>
+          </article>
+        </div>
+        <h3>Example Structured Output</h3>
+        <pre><code>{
+  "study": {
+    "modality": ["XR", "MRI"],
+    "body_part": "knee",
+    "laterality": "right"
+  },
+  "findings": [
+    {
+      "type": "osteoarthritis",
+      "severity": "moderate",
+      "confidence": 0.91
+    },
+    {
+      "type": "meniscal_tear",
+      "location": "posterior_horn",
+      "confidence": 0.87
+    }
+  ],
+  "measurements": {
+    "medial_jsw_mm": 2.8
+  },
+  "explanations": [
+    {
+      "type": "saliency",
+      "target": "meniscal_tear"
+    }
+  ]
+}</code></pre>
+      </div>
+    </section>
+    <!-- ============================================================
+         REPORTING
+    ============================================================= -->
+    <section id="reporting">
+      <div class="container">
+        <div class="section-number">07 — Reporting</div>
+        <h2>Clinical Report Generation</h2>
+        <p>
+          The reporting system should transform validated structured findings
+          into readable clinical language while preserving traceability to
+          the underlying model outputs.
+        </p>
+        <div class="callout">
+          <p>
+            <strong>Recommended architecture:</strong>
+            clinical measurements and validated findings are generated first;
+            the natural-language layer only verbalizes those structured
+            outputs. It should not independently invent diagnoses,
+            measurements, or treatment recommendations.
+          </p>
+        </div>
+        <h3>Example Report</h3>
+        <pre><code>IMPRESSION
+Moderate radiographic osteoarthritis of the right knee.
+• Medial joint-space width is reduced compared with the
+  available baseline examination.
+• MRI demonstrates a suspected posterior-horn meniscal tear.
+• Quantitative measurements and confidence values are
+  available in the AI analysis panel.
+Radiologist review required before clinical use.</code></pre>
+      </div>
+    </section>
+    <!-- ============================================================
+         WORKFLOW
+    ============================================================= -->
+    <section id="workflow">
+      <div class="container">
+        <div class="section-number">08 — Clinical Workflow</div>
+        <h2>Clinical Integration</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>EHR Integration</h3>
+            <p>
+              Use standards-based interfaces such as FHIR to retrieve
+              authorized clinical context where appropriate.
+            </p>
+          </article>
+          <article class="card">
+            <h3>PACS Integration</h3>
+            <p>
+              Integrate with imaging workflows through DICOM-compatible
+              infrastructure and viewers such as OHIF.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Radiologist-in-the-Loop</h3>
+            <p>
+              Present AI findings for review, correction, acceptance, or
+              rejection before they become part of the clinical record.
+            </p>
+          </article>
+        </div>
+        <h3>Workflow</h3>
+        <div class="architecture">
+          <div class="arch-layer">
+            <strong>1. Imaging Study Received</strong>
+            <span>
+              DICOM study enters the AI processing environment.
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>2. Automated Quality Control</strong>
+            <span>
+              Validate modality, anatomy, orientation, completeness, and
+              technical quality.
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>3. AI Analysis</strong>
+            <span>
+              Detection, segmentation, measurement, and multimodal fusion.
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>4. Explainability</strong>
+            <span>
+              Generate attribution maps and structured evidence.
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>5. Radiologist Review</strong>
+            <span>
+              Accept, reject, modify, or annotate AI findings.
+            </span>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-layer">
+            <strong>6. Final Clinical Report</strong>
+            <span>
+              Human-reviewed findings are incorporated into the clinical
+              workflow.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         LONGITUDINAL
+    ============================================================= -->
+    <section id="longitudinal">
+      <div class="container">
+        <div class="section-number">09 — Longitudinal Intelligence</div>
+        <h2>Longitudinal Monitoring</h2>
+        <p>
+          A core capability of OmniSkel-AI is the ability to compare current
+          and historical examinations rather than treating each study as an
+          isolated event.
+        </p>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Baseline Comparison</h3>
+            <p>
+              Align historical and current imaging studies using validated
+              registration techniques.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Structural Change</h3>
+            <p>
+              Quantify changes in cartilage thickness, joint-space width,
+              alignment, and other validated measurements.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Progression Tracking</h3>
+            <p>
+              Calculate rates of change over time using longitudinal models.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Change Alerts</h3>
+            <p>
+              Flag statistically or clinically meaningful changes for
+              clinician review according to validated thresholds.
+            </p>
+          </article>
+        </div>
+        <pre><code>Historical Study
+      │
+      ▼
+Spatial Registration
+      │
+      ▼
+Anatomical Correspondence
+      │
+      ▼
+Current Study
+      │
+      ▼
+Quantitative Comparison
+      │
+      ├── Joint Space Width
+      ├── Cartilage Thickness
+      ├── Lesion Volume
+      ├── Alignment
+      └── Other Validated Biomarkers
+      │
+      ▼
+Longitudinal Trend
+      │
+      ▼
+Clinician Review</code></pre>
+      </div>
+    </section>
+    <!-- ============================================================
+         SECURITY
+    ============================================================= -->
+    <section id="security">
+      <div class="container">
+        <div class="section-number">10 — Security &amp; Compliance</div>
+        <h2>Security Architecture</h2>
+        <p>
+          Security, privacy, governance, and clinical validation should be
+          designed into the platform from the beginning rather than added
+          after model development.
+        </p>
+        <div class="grid">
+          <article class="card">
+            <div class="metric">AES-256</div>
+            <p>Encryption at rest.</p>
+          </article>
+          <article class="card">
+            <div class="metric">TLS 1.3</div>
+            <p>Encrypted data transmission.</p>
+          </article>
+          <article class="card">
+            <div class="metric">RBAC</div>
+            <p>Role-based access control and least-privilege access.</p>
+          </article>
+          <article class="card">
+            <div class="metric">Audit</div>
+            <p>Immutable or tamper-evident access and workflow logs.</p>
+          </article>
+          <article class="card">
+            <div class="metric">PHI</div>
+            <p>Protected health information controls and de-identification.</p>
+          </article>
+          <article class="card">
+            <div class="metric">Consent</div>
+            <p>Data-use and consent-management workflows.</p>
+          </article>
+        </div>
+        <h3>Regulatory Strategy</h3>
+        <p>
+          A future medical-device pathway should be developed with regulatory
+          specialists and based on the final intended use, claims, risk
+          classification, software functions, clinical evidence, and
+          applicable jurisdiction.
+        </p>
+        <div class="callout warning">
+          <p>
+            <strong>Important:</strong>
+            Regulatory classification and clearance pathways should be treated
+            as project workstreams to be validated with the relevant
+            regulatory authority. The architecture should not assume that a
+            specific clearance route is guaranteed.
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         VALIDATION
+    ============================================================= -->
+    <section id="validation">
+      <div class="container">
+        <div class="section-number">11 — Validation</div>
+        <h2>Phase 1 Validation Framework</h2>
+        <p>
+          The prototype should establish predefined performance targets and
+          evaluate them on patient-level held-out data. Any previously
+          reported performance numbers must be traceable to their underlying
+          dataset, protocol, and publication or experiment.
+        </p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Candidate Metric</th>
+                <th>Phase 1 Target</th>
+                <th>Validation Requirement</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>OA detection</td>
+                <td>AUC / sensitivity / specificity</td>
+                <td>&gt; 0.90 AUC target</td>
+                <td>Patient-level held-out test set</td>
+              </tr>
+              <tr>
+                <td>Meniscal tear detection</td>
+                <td>F1 / sensitivity / specificity</td>
+                <td>&gt; 0.85 F1 target</td>
+                <td>Independent MRI evaluation</td>
+              </tr>
+              <tr>
+                <td>JSW measurement</td>
+                <td>MAE / agreement</td>
+                <td>&lt; 0.2 mm target</td>
+                <td>Reader comparison</td>
+              </tr>
+              <tr>
+                <td>Longitudinal change</td>
+                <td>Measurement error</td>
+                <td>Predefined before testing</td>
+                <td>Repeated-study cohort</td>
+              </tr>
+              <tr>
+                <td>Calibration</td>
+                <td>Calibration curve / Brier score</td>
+                <td>Predefined</td>
+                <td>Independent evaluation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Validation Principles</h3>
+        <ul>
+          <li>Split data at the patient level.</li>
+          <li>Prevent patient leakage between train and test sets.</li>
+          <li>Keep the final test set locked until model development ends.</li>
+          <li>Report confidence intervals.</li>
+          <li>Measure calibration, not only discrimination.</li>
+          <li>Evaluate performance across relevant demographic and technical subgroups.</li>
+          <li>Perform external validation on data from a different institution or acquisition environment.</li>
+          <li>Compare AI outputs with appropriately defined clinical reference standards.</li>
+        </ul>
+        <div class="callout danger">
+          <p>
+            <strong>Evidence discipline:</strong>
+            claims such as "94% agreement," "35% time saved," or specific
+            hospital pilot results should only appear in the production
+            specification after the underlying evidence has been verified.
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         PHASE 2
+    ============================================================= -->
+    <section id="phase2">
+      <div class="container">
+        <div class="section-number">12 — Phase 2</div>
+        <h2>Scaling to the Full Musculoskeletal System</h2>
+        <p>
+          Once the knee pipeline is validated, OmniSkel-AI can evolve into a
+          modular whole-body musculoskeletal intelligence platform.
+        </p>
+        <h3>Joint-Specific Modules</h3>
+        <div class="grid">
+          <article class="card">
+            <h3>Knee</h3>
+            <p>
+              Osteoarthritis, cartilage, meniscus, ligaments, alignment.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Hip</h3>
+            <p>
+              Hip osteoarthritis, morphology, dysplasia, cartilage, and
+              related structures.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Spine</h3>
+            <p>
+              Cervical and lumbar submodules with anatomy-specific landmark
+              and pathology models.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Shoulder</h3>
+            <p>
+              Rotator cuff, osteoarthritis, bone morphology, and soft-tissue
+              pathology.
+            </p>
+          </article>
+        </div>
+        <h3>OmniSkel Backbone</h3>
+        <p>
+          The proposed shared backbone would learn general anatomical
+          representations from appropriately curated whole-body imaging,
+          while joint-specific heads specialize those representations for
+          individual anatomical regions.
+        </p>
+        <pre><code>                    OmniSkel Backbone
+                           │
+              Shared Musculoskeletal Features
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+          ▼                ▼                ▼
+        Knee              Hip             Spine
+        Head              Head        ┌─────┴─────┐
+                                      │           │
+                                   Cervical     Lumbar
+                                      │           │
+                                      ▼           ▼
+                                  Specialized Anatomy
+                                        Heads</code></pre>
+        <h3>Potential Future Data Sources</h3>
+        <ul>
+          <li>Whole-body CT datasets</li>
+          <li>Whole-body MRI datasets</li>
+          <li>Spine MRI datasets</li>
+          <li>Shoulder imaging datasets</li>
+          <li>Institutional longitudinal cohorts</li>
+        </ul>
+      </div>
+    </section>
+    <!-- ============================================================
+         KNOWLEDGE GRAPH
+    ============================================================= -->
+    <section id="knowledge">
+      <div class="container">
+        <div class="section-number">13 — Anatomical Intelligence</div>
+        <h2>Anatomical Knowledge Graph</h2>
+        <p>
+          OmniSkel-AI can use a structured anatomical knowledge layer to
+          connect body regions, anatomical structures, imaging observations,
+          measurements, pathologies, and longitudinal events.
+        </p>
+        <pre><code>Patient
+  │
+  ├── Examination
+  │      │
+  │      ├── Modality
+  │      │      ├── X-ray
+  │      │      ├── MRI
+  │      │      ├── CT
+  │      │      └── Ultrasound
+  │      │
+  │      └── Anatomy
+  │             │
+  │             ├── Knee
+  │             │    ├── Femur
+  │             │    ├── Tibia
+  │             │    ├── Patella
+  │             │    ├── Meniscus
+  │             │    ├── Cartilage
+  │             │    └── Ligaments
+  │             │
+  │             └── Pathology
+  │                    ├── OA
+  │                    ├── Tear
+  │                    ├── Degeneration
+  │                    └── Injury</code></pre>
+        <p>
+          This knowledge layer provides a foundation for expanding the
+          platform without forcing every new anatomical region to become an
+          entirely independent AI system.
+        </p>
+      </div>
+    </section>
+    <!-- ============================================================
+         MLOPS
+    ============================================================= -->
+    <section id="mlops">
+      <div class="container">
+        <div class="section-number">14 — MLOps</div>
+        <h2>Model Lifecycle</h2>
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <div class="number">1</div>
+            <h3>Data</h3>
+            <p>
+              Curate, de-identify, annotate, version.
+            </p>
+          </div>
+          <div class="pipeline-step">
+            <div class="number">2</div>
+            <h3>Train</h3>
+            <p>
+              Train reproducible model experiments.
+            </p>
+          </div>
+          <div class="pipeline-step">
+            <div class="number">3</div>
+            <h3>Validate</h3>
+            <p>
+              Evaluate locked datasets and clinical metrics.
+            </p>
+          </div>
+          <div class="pipeline-step">
+            <div class="number">4</div>
+            <h3>Deploy</h3>
+            <p>
+              Release only approved model versions.
+            </p>
+          </div>
+        </div>
+        <h3>Feedback Loop</h3>
+        <pre><code>Clinical Use
+    │
+    ▼
+Radiologist Review
+    │
+    ├── Accepted Finding
+    │
+    ├── Corrected Finding
+    │
+    └── Rejected Finding
+            │
+            ▼
+       Curated Feedback
+            │
+            ▼
+       Model Evaluation
+            │
+            ▼
+       Retraining Candidate
+            │
+            ▼
+      Independent Validation
+            │
+            ▼
+       Model Registry
+            │
+            ▼
+      Controlled Deployment</code></pre>
+        <div class="callout warning">
+          <p>
+            Automated weekly retraining should not be assumed safe for a
+            clinical system. Model updates should pass predefined validation,
+            governance, and release controls before deployment.
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         ROADMAP
+    ============================================================= -->
+    <section id="roadmap">
+      <div class="container">
+        <div class="section-number">15 — Implementation Roadmap</div>
+        <h2>Build Roadmap</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <h3>Month 1 — Foundation</h3>
+            <p>
+              Repository setup, data governance, DICOM pipeline, dataset
+              acquisition, preprocessing framework, experiment tracking,
+              and baseline models.
+            </p>
+          </div>
+          <div class="timeline-item">
+            <h3>Month 2 — Imaging Models</h3>
+            <p>
+              Implement X-ray and MRI encoders, segmentation baseline,
+              pathology detection, and measurement models.
+            </p>
+          </div>
+          <div class="timeline-item">
+            <h3>Month 3 — Multimodal Fusion</h3>
+            <p>
+              Implement MultiSkelFormer fusion, cross-modal attention,
+              multimodal representation learning, and ablation studies.
+            </p>
+          </div>
+          <div class="timeline-item">
+            <h3>Month 4 — Explainability</h3>
+            <p>
+              Add saliency maps, structured findings, confidence estimation,
+              measurement explanations, and clinician-facing visualization.
+            </p>
+          </div>
+          <div class="timeline-item">
+            <h3>Month 5 — Clinical Workflow</h3>
+            <p>
+              Integrate DICOM/PACS infrastructure, OHIF-based visualization,
+              FHIR interfaces, radiologist review, audit logging, and report
+              generation.
+            </p>
+          </div>
+          <div class="timeline-item">
+            <h3>Month 6 — Validation</h3>
+            <p>
+              Lock the evaluation dataset, execute validation experiments,
+              quantify performance and uncertainty, document limitations,
+              and prepare the next-stage clinical research plan.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         PROJECT STRUCTURE
+    ============================================================= -->
+    <section id="repository">
+      <div class="container">
+        <div class="section-number">16 — Engineering Structure</div>
+        <h2>Recommended Repository</h2>
+        <pre><code>omniskel-ai/
+│
+├── apps/
+│   ├── radiology-dashboard/
+│   └── patient-portal/
+│
+├── services/
+│   ├── dicom-ingestion/
+│   ├── inference-api/
+│   ├── reporting-service/
+│   ├── longitudinal-service/
+│   └── audit-service/
+│
+├── models/
+│   ├── multiskeleformer/
+│   ├── xray/
+│   ├── mri/
+│   ├── segmentation/
+│   ├── detection/
+│   ├── measurement/
+│   └── longitudinal/
+│
+├── pipelines/
+│   ├── preprocessing/
+│   ├── datasets/
+│   ├── augmentation/
+│   └── evaluation/
+│
+├── explainability/
+│   ├── gradcam/
+│   ├── shap/
+│   └── attribution/
+│
+├── clinical/
+│   ├── fhir/
+│   ├── dicom/
+│   ├── terminology/
+│   └── reporting/
+│
+├── infrastructure/
+│   ├── docker/
+│   ├── kubernetes/
+│   ├── monitoring/
+│   └── security/
+│
+├── configs/
+│
+├── tests/
+│
+├── notebooks/
+│
+├── docs/
+│
+├── scripts/
+│
+├── pyproject.toml
+├── README.md
+└── LICENSE</code></pre>
+      </div>
+    </section>
+    <!-- ============================================================
+         PRINCIPLES
+    ============================================================= -->
+    <section id="principles">
+      <div class="container">
+        <div class="section-number">17 — Engineering Principles</div>
+        <h2>Design Principles</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Security Before Features</h3>
+            <p>
+              Patient data protection and access control are foundational
+              system requirements.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Tests Before Deployment</h3>
+            <p>
+              Every production model and software release should pass
+              automated and domain-specific validation.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Evidence Before Claims</h3>
+            <p>
+              Performance claims must be reproducible and traceable to
+              documented experiments or external evidence.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Human Oversight</h3>
+            <p>
+              Clinical decisions remain under qualified human supervision.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Modular by Design</h3>
+            <p>
+              New modalities, anatomical regions, and models should be
+              independently extensible.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Explainability by Design</h3>
+            <p>
+              The platform should expose evidence and uncertainty alongside
+              predictions.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <!-- ============================================================
+         CONCLUSION
+    ============================================================= -->
+    <section id="conclusion">
+      <div class="container">
+        <div class="section-number">18 — Vision</div>
+        <h2>Knee First. Entire Skeleton Next.</h2>
+        <p>
+          OmniSkel-AI begins with a focused knee-imaging prototype and is
+          architected from the beginning for expansion into a broader
+          musculoskeletal intelligence platform.
+        </p>
+        <p>
+          The long-term architecture combines multimodal medical imaging,
+          anatomical representation learning, quantitative biomarkers,
+          longitudinal reasoning, explainability, clinical workflow
+          integration, and human-in-the-loop validation.
+        </p>
+        <div class="callout">
+          <p>
+            <strong>Vision:</strong>
+            Build an extensible intelligence layer for musculoskeletal
+            imaging that helps clinicians understand not only
+            <em>what</em> is visible, but also how structures change over
+            time and which measurable findings support each AI output.
+          </p>
+        </div>
+        <div class="hero-meta">
+          <span class="badge">Knee</span>
+          <span class="badge">Hip</span>
+          <span class="badge">Spine</span>
+          <span class="badge">Shoulder</span>
+          <span class="badge">Whole Body</span>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- ============================================================
+       FOOTER
+  ============================================================= -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <div class="footer-brand">
+            OmniSkel-AI
+          </div>
+          <div class="copyright">
+            Multimodal Musculoskeletal Intelligence Platform
+          </div>
+        </div>
+        <div class="footer-note">
+          <p>
+            Technical blueprint for research and prototype development.
+            Clinical deployment requires appropriate validation, governance,
+            regulatory review, security controls, and qualified clinical
+            oversight.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
