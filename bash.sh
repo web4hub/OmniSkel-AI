@@ -1,3 +1,8 @@
+$ mkdir look
+$ cd look
+$ virtualenv .venv
+$ source .venv/bin/activate
+$ pip install falcon
 kaggle kernels pull auraecosystem/kaggle-854ccca8a132
 git clone https://github.com/web4hub/OmniSkel-AI.git
 cd OmniSkel-AI
@@ -15,6 +20,9 @@ uv run cb submission run      -f configs/submissions/<your-id>.yaml
 
 # Check progress; safe to run while `submission run` is in flight.
 uv run cb submission status   -f configs/submissions/<your-id>.yaml
+$ source .venv/bin/activate
+$ pip install httpie
+$ http localhost:8000
 
 # Curate the leaderboard-ready packet.
 uv run cb submission prepare  -f configs/submissions/<omniskel-ai>.yaml
@@ -29,3 +37,6 @@ git push origin sub/<bench>/2026-05-13-<slug>
 gh pr create -R actava-ai/leaderboard --base main
 cp .env.example .env
 docker compose -f infra/docker-compose.yml up --build
+$ source .venv/bin/activate
+$ pip install gunicorn
+$ gunicorn --reload look.app
