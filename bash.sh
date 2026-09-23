@@ -27,3 +27,5 @@ git checkout -b sub/<bench>/2026-05-13-<slug>
 git commit -am "<bench>: <team> · <agent> · <model>"
 git push origin sub/<bench>/2026-05-13-<slug>
 gh pr create -R actava-ai/leaderboard --base main
+cp .env.example .env
+docker compose -f infra/docker-compose.yml up --build
