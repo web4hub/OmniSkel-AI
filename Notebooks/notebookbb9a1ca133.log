@@ -1,0 +1,36 @@
+8.2s 1 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.2s 2 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.2s 3 0.00s - to python to disable frozen modules.
+8.2s 4 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+8.8s 5 0.00s - Debugger warning: It seems that frozen modules are being used, which may
+8.8s 6 0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+8.8s 7 0.00s - to python to disable frozen modules.
+8.8s 8 0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+11.3s 9 Traceback (most recent call last):
+11.3s 10 File "<string>", line 1, in <module>
+11.3s 11 File "/usr/local/lib/python3.12/dist-packages/papermill/execute.py", line 131, in execute_notebook
+11.3s 12 raise_for_execution_errors(nb, output_path)
+11.3s 13 File "/usr/local/lib/python3.12/dist-packages/papermill/execute.py", line 251, in raise_for_execution_errors
+11.3s 14 raise error
+11.3s 15 papermill.exceptions.PapermillExecutionError:
+11.3s 16 ---------------------------------------------------------------------------
+11.3s 17 Exception encountered at "In [1]":
+11.3s 18 ---------------------------------------------------------------------------
+11.3s 19 ModuleNotFoundError                       Traceback (most recent call last)
+11.3s 20 /tmp/ipykernel_23/2857301114.py in <cell line: 0>()
+11.3s 21 1 import pandas as pd
+11.3s 22 ----> 2 from rdkit import Chem
+11.3s 23 3
+11.3s 24 4
+11.3s 25 5 MAX_CANDIDATES = 25
+11.3s 26 
+11.3s 27 ModuleNotFoundError: No module named 'rdkit'
+11.3s 28 
+13.4s 29 /usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+13.4s 30 cells[i][c] = re.sub('\\\\\|', '|', cell)
+13.6s 31 /usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+13.6s 32 text = re.sub(r'_', '\_', text) # Escape underscores in display text
+14.4s 33 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+14.7s 34 [NbConvertApp] Writing 16297 bytes to __notebook__.ipynb
+17.4s 35 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+18.2s 36 [NbConvertApp] Writing 306446 bytes to __results__.html
