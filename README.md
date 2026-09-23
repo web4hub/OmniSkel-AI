@@ -1,12 +1,50 @@
 # OmniSkel-AI
 
-Multimodal musculoskeletal imaging intelligence platform.
+Multimodal musculoskeletal imaging intelligence research platform.
 
-## Phase 1 MVP
-Knee MRI vertical slice:
+## Phase 1 — Knee MRI vertical slice
+
 DICOM ingestion → preprocessing/QC → anatomy segmentation → pathology inference → quantification → explainability → structured findings → clinical viewer.
 
-> Research/engineering scaffold. Not a medical device and not for clinical diagnosis.
+> **Research/engineering scaffold.** This repository is not a medical device and must not be used for clinical diagnosis or treatment decisions.
+
+## Repository architecture
+
+```text
+omniskel-ai/
+├── apps/
+│   ├── radiology-dashboard/
+│   └── patient-portal/
+├── services/
+│   ├── dicom-ingestion/
+│   ├── inference-api/
+│   ├── reporting-service/
+│   ├── longitudinal-service/
+│   └── audit-service/
+├── src/omniskel/
+│   ├── core/
+│   ├── imaging/
+│   ├── inference/
+│   ├── models/
+│   ├── clinical/
+│   ├── longitudinal/
+│   ├── explainability/
+│   ├── reporting/
+│   ├── audit/
+│   └── security/
+├── models/
+├── pipelines/
+├── explainability/
+├── clinical/
+├── evaluation/
+├── data/
+├── infrastructure/
+├── configs/
+├── tests/
+├── notebooks/
+├── docs/
+└── scripts/
+```
 
 ## Quick start
 
@@ -15,18 +53,24 @@ cp .env.example .env
 docker compose -f infra/docker-compose.yml up --build
 ```
 
-UI: http://localhost:3000
-API docs: http://localhost:8000/docs
-Model service: http://localhost:8001/docs
+- Clinical viewer: http://localhost:3000
+- API docs: http://localhost:8000/docs
+- Model service: http://localhost:8001/docs
+- MinIO console: http://localhost:9001
 
-The model service is intentionally a stub until validated datasets and trained weights are supplied.
+The model service is intentionally a deterministic stub until validated datasets and trained weights are supplied.
 
-## M1 DICOM ingestion
+## Safety and data policy
 
-The API now exposes `POST /v1/dicom/upload` for individual DICOM instances. The ingestion path parses and validates the DICOM, applies the research de-identification routine, remaps UIDs, stores the anonymized object in MinIO, registers Study/Series/Instance records in Postgres, and queues a pipeline job in Redis. This is a research scaffold and the de-identification profile must be validated and hardened before any clinical deployment.
+Never commit patient-identifiable data, DICOM studies, trained clinical weights, secrets, or production credentials. Use synthetic or properly governed research datasets. De-identification is a research starting point, not a compliance guarantee.
 
-Example:
+## Development
 
 ```bash
-curl -F "file=@/path/to/instance.dcm" http://localhost:8000/v1/dicom/upload
+python -m venv .venv
+source .venv/bin/activate
+pip install -r services/api/requirements.txt
+pytest -q
 ```
+
+See `docs/architecture.md`, `docs/development.md`, and `docs/validation.md`.
